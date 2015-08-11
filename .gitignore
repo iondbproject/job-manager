@@ -4,3 +4,7 @@
 Session.vim
 .netrwhist
 *~
+*.swp
+*.swo
+*.DS_Store
+bin/*

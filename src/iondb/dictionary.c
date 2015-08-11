@@ -7,6 +7,7 @@
 /******************************************************************************/
 
 #include "dictionary.h"
+#include <string.h>
 
 ion_dictionary_compare_t
 dictionary_switch_compare(
@@ -206,7 +207,12 @@ dictionary_compare_char_array(
 	ion_key_size_t	key_size
 )
 {
-	return memcmp((char *)first_key, (char *)second_key, key_size);
+	int result	= memcmp((char *)first_key, (char *)second_key, key_size);
+	if (result > 0)
+		return 1;
+	if (result < 0)
+		return -1;
+	return 0;
 }
 
 char

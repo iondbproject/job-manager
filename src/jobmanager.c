@@ -8,15 +8,6 @@
 
 #include "jobmanager.h"
 
-static ion_dictionary_config_info_t sjm_dict_config = {
-	0,
-	SJM_ION_DICT_USE_TYPE,
-	key_type_char_array,
-	20,
-	20,
-	-1
-};
-
 sjm_error_t
 sjm_dequeue_next_job(
 	sjm_t		*jobmanager,
@@ -157,6 +148,10 @@ sjm_perform_job(
 					(ion_key_t)buffer,
 					(ion_value_t)&job
 				);
+	if (err_ok != ion_error)
+	{
+		return SJM_ERROR_DICT_GET_FAILURE;
+	}
 	job.func(params, retval);
 	
 	return SJM_ERROR_OK;
@@ -507,16 +502,23 @@ sjm_queue_scheduled_jobs(
 	err_t		error;
 	sjm_error_t	sjmerror;
 	sensor_job_t	*job;
+	milliseconds_t	milliseconds;
 	char		keydata[jobmanager->dictionary.instance->record.key_size];
 	char		valuedata[jobmanager->dictionary.instance->record.value_size];
-	milliseconds_t	milliseconds;
 	record.key			= (void *)keydata;
 	record.value			= (void *)valuedata;
 	sjmerror			= SJM_ERROR_OK;
+	if (NULL == record.key || NULL == record.value)
+	{
+		return SJM_ERROR_MEMORY_ALLOCATION_FAILURE;
+	}
 	
 	/* Get a cursor over all the items in the job dictionary. */
 	cursor				= NULL;
-	predicate.type			= predicate_all_records;
+	error				= dictionary_build_predicate(
+						&predicate,
+						predicate_all_records
+					);
 	error				= dictionary_find(
 						&(jobmanager->dictionary),
 						&predicate,
@@ -535,11 +537,17 @@ sjm_queue_scheduled_jobs(
 						job,
 						(char *)(record.key)
 					);
+			if (SJM_ERROR_OK != sjmerror)
+			{
+				cursor->destroy(&cursor);
+				return error;
+			}
 			job->last_scheduled_time
 					= ms_milliseconds();
 			sjm_update_job(jobmanager, job, (char *)(record.key));
 		}
 	}
+	cursor->destroy(&cursor);
 	
 	return SJM_ERROR_OK;
 }

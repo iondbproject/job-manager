@@ -129,6 +129,9 @@ void test_jobmanager_nonjson_generic(
 	sensor_job_t	job;
 	sjm_error_t	error;
 	
+	error		= ion_init_master_table();
+	CuAssertTrue(tc, SJM_ERROR_OK == error);
+	
 	error		= sjm_init(
 				&jobmanager,
 				maximum_name_size,
@@ -150,6 +153,9 @@ void test_jobmanager_nonjson_generic(
 	
 	error		= sjm_delete(&jobmanager);
 	CuAssertTrue(tc, SJM_ERROR_OK == error);
+	
+	error		= ion_close_master_table();
+	CuAssertTrue(tc, SJM_ERROR_OK == error);
 }
 
 void test_jobmanager_json_generic(
@@ -165,6 +171,9 @@ void test_jobmanager_json_generic(
 	sjm_t		jobmanager;
 	sensor_job_t	job;
 	sjm_error_t	error;
+	
+	error		= ion_init_master_table();
+	CuAssertTrue(tc, SJM_ERROR_OK == error);
 	
 	error		= sjm_init(
 				&jobmanager,
@@ -186,6 +195,9 @@ void test_jobmanager_json_generic(
 	
 	error		= sjm_delete(&jobmanager);
 	CuAssertTrue(tc, SJM_ERROR_OK == error);
+	
+	error		= ion_close_master_table();
+	CuAssertTrue(tc, SJM_ERROR_OK == error);
 }
 
 void test_jobmanager_scheduled_generic(
@@ -201,6 +213,10 @@ void test_jobmanager_scheduled_generic(
 	sjm_t		jobmanager;
 	sjm_error_t	error;
 	int		i;
+	
+	error		= ion_init_master_table();
+	CuAssertTrue(tc, SJM_ERROR_OK == error);
+	
 	error		= sjm_init(
 				&jobmanager,
 				maximum_name_size,
@@ -232,6 +248,9 @@ void test_jobmanager_scheduled_generic(
 	CuAssertTrue(tc, SJM_ERROR_OK == error);
 	
 	error		= sjm_delete(&jobmanager);
+	CuAssertTrue(tc, SJM_ERROR_OK == error);
+	
+	error		= ion_close_master_table();
 	CuAssertTrue(tc, SJM_ERROR_OK == error);
 }
 

@@ -71,7 +71,7 @@ ms_milliseconds(
 	struct timespec spec;
 	clock_gettime(CLOCK_REALTIME, &spec);
 	/* Convert nano to milliseconds. */
-	millis_return = llround(spec.tv_sec*1000) + llround(spec.tv_nsec / 1.0e6);
+	millis_return = llround(spec.tv_sec*1000) + llround(spec.tv_nsec/1.0e6);
 #endif
 #endif
 	

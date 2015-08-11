@@ -166,6 +166,7 @@ typedef enum    sensor_job_manager_error
 						     not be initialized. */
 	SJM_ERROR_DICT_UPDATE_FAILURE,		/**< Dictionary update failure.
 						*/
+	SJM_ERROR_DICT_GET_FAILURE,		/**< Dictionary get failure. */
 	SJM_ERROR_ADD_JOB,			/**< IonDB dictionary could
 						     not add job. */
 	SJM_ERROR_GET_JOB,			/**< IonDB dictionary could

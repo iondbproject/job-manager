@@ -35,7 +35,7 @@ DOC       := doc
 # Compiler options
 GCC           =  gcc
 CC            =  $(GCC)
-CFLAGS        := $(CFLAGS) -Wall -g
+CFLAGS        := $(CFLAGS) -lm -Wall -g
 OUTPUT_OPTION =  -o $@
 ################################################################################
 
